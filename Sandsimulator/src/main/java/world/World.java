@@ -152,13 +152,13 @@ public class World {
 			currentCellType = 0;
 
 		if (Keys.SPACE.pressed || Keys.MOUSE_RIGHT.pressed) {
-			var worldPos = Game.getGameCamera().getCamera().unproject(new Vector3(Mouse.getX(), Mouse.getY(), 0));
+			var worldPos = Game.getGameCamera().unproject(new Vector3(Mouse.getX(), Mouse.getY(), 0));
 			world = CellUpdater.fill(world, (int) Math.floor(worldPos.x), (int) Math.floor(worldPos.y), cursorSize,
 					cellTypeList[(currentCellType + 3) % (cellTypeList.length)]);
 		}
 
 		if (Keys.Q.pressed || Keys.MOUSE_LEFT.pressed) {
-			var worldPos = Game.getGameCamera().getCamera().unproject(new Vector3(Mouse.getX(), Mouse.getY(), 0));
+			var worldPos = Game.getGameCamera().unproject(new Vector3(Mouse.getX(), Mouse.getY(), 0));
 			world = CellUpdater.fill(world, (int) Math.floor(worldPos.x), (int) Math.floor(worldPos.y), cursorSize,
 					null);
 		}
@@ -281,7 +281,7 @@ public class World {
 		sr.set(ShapeType.Line);
 		sr.rect(0, 0, width, height);
 
-		var worldPos = Game.getGameCamera().getCamera().unproject(new Vector3(Mouse.getX(), Mouse.getY(), 0));
+		var worldPos = Game.getGameCamera().unproject(new Vector3(Mouse.getX(), Mouse.getY(), 0));
 		int x = (int) Math.floor(worldPos.x), y = (int) Math.floor(worldPos.y);
 
 		sr.rect(x - cursorSize / 2, y - cursorSize / 2, cursorSize, cursorSize);

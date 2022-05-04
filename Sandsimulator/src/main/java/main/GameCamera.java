@@ -5,21 +5,16 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 
-public class GameCamera {
+public class GameCamera extends OrthographicCamera {
 	
-	private Camera camera;
 	private float zoom = 1f;
 	private float x, y;
 	
 	private float maxZoom = 0.01f;
 	
 	public GameCamera() {
-		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-	    camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-	}
-	
-	public Camera getCamera() {
-		return camera;
+		super(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+	    super.position.set(super.viewportWidth / 2, super.viewportHeight / 2, 0);
 	}
 
 	public float getZoom() {
@@ -29,20 +24,20 @@ public class GameCamera {
 	public void setZoom(float zoom) {
 		this.zoom = zoom;
 		if (this.zoom < maxZoom) this.zoom = maxZoom;
-		((OrthographicCamera)camera).zoom = zoom;
+		super.zoom = zoom;
 	}
 	
 	public void changeZoom(float zoom, int pointX, int pointY) {
-		var worldPosBefore = camera.unproject(new Vector3(pointX, pointY, 0));
+		var worldPosBefore = super.unproject(new Vector3(pointX, pointY, 0));
 		float worldXBefore = worldPosBefore.x, worldYBefore = worldPosBefore.y;
 		
 		
 		this.zoom += zoom * (this.zoom - maxZoom);
 		if (this.zoom < maxZoom) this.zoom = maxZoom;
-		((OrthographicCamera)camera).zoom = this.zoom;
-		camera.update();
+		super.zoom = this.zoom;
+		super.update();
 		
-		var worldPosAfter = camera.unproject(new Vector3(pointX, pointY, 0));
+		var worldPosAfter = super.unproject(new Vector3(pointX, pointY, 0));
 		float worldXAfter = worldPosAfter.x, worldYAfter = worldPosAfter.y;
 		
 		x-=(worldXAfter - worldXBefore);// * zoom; //zoom/5;
@@ -80,8 +75,8 @@ public class GameCamera {
 	}
 	
 	void updatePosition() {
-		camera.position.set(this.x, this.y, 0);
-		camera.update();
+		super.position.set(this.x, this.y, 0);
+		super.update();
 	}
 	
 }

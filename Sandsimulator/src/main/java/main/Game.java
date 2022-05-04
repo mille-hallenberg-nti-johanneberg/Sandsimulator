@@ -27,6 +27,7 @@ import input.Keys;
 import input.Mouse;
 import states.GameState;
 import states.State;
+import ui.Menu;
 
 public class Game extends ApplicationAdapter {
 	
@@ -41,7 +42,6 @@ public class Game extends ApplicationAdapter {
 	
 	//Camera
 	private static GameCamera gameCamera;
-	private static Camera camera;
 	private static Camera fontCamera;
 	private static Viewport viewport;
 	private static Viewport fontViewport;
@@ -49,6 +49,9 @@ public class Game extends ApplicationAdapter {
 	
 	//Input
 	private InputManager input;
+	
+	// Menu
+	private Menu menu;
 	
 	public Game (String title, int width, int height) {
 		//window = new Window(title, width, height);
@@ -71,13 +74,12 @@ public class Game extends ApplicationAdapter {
 		
 		setGameCamera(new GameCamera());
 		
-		camera = getGameCamera().getCamera();
 		gameCamera.setX(0);
 		gameCamera.setY(0);
 		
 		fontCamera = new OrthographicCamera();
 		
-	    viewport = new ExtendViewport(width, height, camera);
+	    viewport = new ExtendViewport(width, height, gameCamera);
 	    fontViewport = new ScreenViewport(fontCamera);
 	    
 	    sr = new ShapeRenderer();
@@ -85,6 +87,8 @@ public class Game extends ApplicationAdapter {
 	    
 	    batch = new SpriteBatch();
 	    CellRecipes.create();
+	    
+	    menu = new Menu();
 	}
 	
 	@Override
@@ -92,13 +96,15 @@ public class Game extends ApplicationAdapter {
         viewport.update(viewportWidth, viewportHeight, true);
         fontViewport.update(viewportWidth, viewportHeight, true);
         
-        camera.position.set(width / 2f, height / 2f, 0);
+        gameCamera.position.set(width / 2f, height / 2f, 0);
         fontCamera.position.set(viewportWidth / 2f, viewportHeight / 2f, 0);
         
         gameCamera.updatePosition();
         fontCamera.update(true);
         viewport.apply();
         fontViewport.apply();
+        
+        menu.resize(viewportWidth, viewportHeight);
 	}
 	
 	void tick() {
@@ -141,10 +147,10 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		tick();
 		
-		sr.setProjectionMatrix(camera.combined);
+		sr.setProjectionMatrix(gameCamera.combined);
 		batch.setProjectionMatrix(fontCamera.combined);
 		
-		camera.update();
+		gameCamera.update();
 		sr.begin();
 		sr.set(ShapeType.Filled);
 		if (State.getState() != null) {
@@ -159,6 +165,8 @@ public class Game extends ApplicationAdapter {
 		
 		font.setColor(Color.RED);
 		font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 8, Gdx.graphics.getHeight() - 8);
+		
+		menu.render(batch);
 		
 		batch.end();
 	}
